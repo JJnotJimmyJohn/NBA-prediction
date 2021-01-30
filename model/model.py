@@ -2,7 +2,8 @@
 Predicts NBA scores with regularized matrix factorization.
 """
 
-import urllib2
+# import urllib3
+import requests
 import pickle
 import subprocess
 import pandas as pd
@@ -68,8 +69,10 @@ class NBAModel:
         box_urls = []
         for url in self.urls:
             print('****', url)
-            response = urllib2.urlopen(url)
-            html = response.read()
+            # response = urllib3.urlopen(url)
+            # html = response.read()
+            response=requests.get(url)
+            html = response.content
             soup = BeautifulSoup(html, 'html.parser')
             soup.find_all('a')
             for link in soup.find_all('a'):
@@ -88,8 +91,11 @@ class NBAModel:
         Returns:
             stats (pd.DataFrame): DataFrame of statistics from game
         """
-        response = urllib2.urlopen(url)
-        html = response.read()
+        # response = urllib2.urlopen(url)
+        # html = response.read()
+        response=requests.get(url)
+        html = response.content
+        html = html.decode()
         stat_html = html.replace('<!--', "")
         stat_html = stat_html.replace('-->', "")
         stats = pd.read_html(stat_html)
@@ -223,14 +229,14 @@ class NBAModel:
         print('')
 
 
-model = NBAModel(update=True)
-model.get_scores('PHO', 'WAS')
-model.get_scores('GSW', 'IND')
-model.get_scores('MEM', 'CHO')
-model.get_scores('MIA', 'PHI')
-model.get_scores('HOU', 'DET')
-model.get_scores('ORL', 'MIL')
-model.get_scores('BOS', 'MIN')
-model.get_scores('DAL', 'SAS')
-model.get_scores('TOR', 'LAC')
+# model = NBAModel(update=True)
+# model.get_scores('PHO', 'WAS')
+# model.get_scores('GSW', 'IND')
+# model.get_scores('MEM', 'CHO')
+# model.get_scores('MIA', 'PHI')
+# model.get_scores('HOU', 'DET')
+# model.get_scores('ORL', 'MIL')
+# model.get_scores('BOS', 'MIN')
+# model.get_scores('DAL', 'SAS')
+# model.get_scores('TOR', 'LAC')
 
